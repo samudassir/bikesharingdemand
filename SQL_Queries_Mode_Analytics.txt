@@ -1,0 +1,368 @@
+
+SELECT companies.*, acq.*
+  FROM tutorial.crunchbase_companies companies 
+  LEFT JOIN tutorial.crunchbase_acquisitions acq
+  ON companies.permalink = acq.company_permalink
+  
+SELECT *
+  FROM tutorial.crunchbase_acquisitions where company_permalink='/company/8868'
+
+SELECT companies.*
+  FROM tutorial.crunchbase_companies companies
+  
+select count(distinct(companies.name)) as companies,count(distinct(acq.company_name)) as acq_companies
+  from tutorial.crunchbase_companies companies
+  JOIN tutorial.crunchbase_acquisitions  as acq
+  on companies.name=acq.company_name
+  
+SELECT companies.state_code,
+       COUNT(DISTINCT companies.permalink) AS unique_companies,
+       COUNT(DISTINCT acquisitions.company_permalink) AS unique_companies_acquired
+  FROM tutorial.crunchbase_companies companies
+  LEFT JOIN tutorial.crunchbase_acquisitions acquisitions
+    ON companies.permalink = acquisitions.company_permalink
+ WHERE companies.state_code IS NOT NULL
+ GROUP BY 1
+ ORDER BY 3 DESC
+
+/**/
+Select player.school_name,player.player_name,player.position,player.weight from benn.college_football_players player where player.state='GA' order by player.weight desc
+
+/*Join query to get the player information for given division*/
+select player.player_name,player.school_name,teams.conference
+from 
+benn.college_football_players player
+join benn.college_football_teams teams 
+on player.school_name=teams.school_name 
+where teams.division='FBS (Division I-A Teams)'
+
+SELECT *
+  FROM benn.college_football_players
+  
+  SELECT *
+  FROM benn.college_football_teams teams
+ 
+/*CASE test*/
+SELECT count(CASE when year='SR' THEN 1 END)  as "test_col",count(CASE when year='SO' THEN 1 END)  as "test_col2"  from benn.college_football_players
+
+
+SELECT COUNT(CASE WHEN year = 'FR' THEN 1 ELSE NULL END) AS fr_count,
+       COUNT(CASE WHEN year = 'SO' THEN 1 ELSE NULL END) AS so_count,
+       COUNT(CASE WHEN year = 'JR' THEN 1 ELSE NULL END) AS jr_count,
+       COUNT(CASE WHEN year = 'SR' THEN 1 ELSE NULL END) AS sr_count
+  FROM benn.college_football_players
+  
+/*school names starting from A-M and N-Z*/
+SELECT CASE WHEN school_name < 'n' then 'A-M'
+WHEN school_name >= 'n' then 'M-Z'
+ELSE NULL
+END as school_group, count(1)
+from benn.college_football_players group by 1
+
+select * from tutorial.crunchbase_investments
+select * from tutorial.crunchbase_companies
+
+/* Count Number of distinct investors for each company */
+SELECT companies.name, companies.status, COUNT(DISTINCT(investments.investor_permalink)) as investors
+FROM tutorial.crunchbase_companies as companies 
+ JOIN tutorial.crunchbase_investments as investments
+ON  companies.permalink = investments.company_permalink
+WHERE companies.state_code = 'NY'
+group by companies.name,companies.status
+order by investors desc
+
+
+select * from tutorial.crunchbase_companies_clean_date
+select * from tutorial.crunchbase_acquisitions_clean_date 
+
+/*Type casting with time*/
+select companies.category_code,
+COUNT(CASE WHEN acq.acquired_at_cleaned<companies.founded_at_clean::timestamp+INTERVAL '3 years' THEN 1 ELSE NULL END) as Three_years_for_acquisition,
+COUNT(CASE WHEN acq.acquired_at_cleaned<companies.founded_at_clean::timestamp+INTERVAL '5 years' THEN 1 ELSE NULL END) as Five_years_for_acquisition,
+COUNT(CASE WHEN acq.acquired_at_cleaned<companies.founded_at_clean::timestamp+INTERVAL '10 years' THEN 1 ELSE NULL END) as Ten_years_for_acquisition,
+count(1) as total
+from tutorial.crunchbase_companies_clean_date companies 
+join tutorial.crunchbase_acquisitions_clean_date acq
+on companies.permalink=acq.company_permalink
+where acq.acquired_at_cleaned IS NOT NULL and companies.founded_at_clean IS NOT NULL and companies.category_code IS NOT NULL
+group by companies.category_code
+order by total DESC
+
+SELECT *
+  FROM tutorial.sf_crime_incidents_2014_01
+
+/*Data Wrangling - use left or right functions*/
+ SELECT incidnt_num,
+       date,
+       LEFT(date, 10) AS cleaned_date,
+       RIGHT(date, 17) AS cleaned_time
+  FROM tutorial.sf_crime_incidents_2014_01 
+  
+   /*Data wrangling - seperate lat, long from location*/
+  SELECT SUBSTR((TRIM(both '()' from location)), 0,STRPOS(TRIM(both '()' from location),',')) as lati, SUBSTR((TRIM(both '()' from location)), STRPOS(TRIM(both '()' from location),',')+2,LENGTH(location)) from tutorial.sf_crime_incidents_2014_01 
+  
+ 
+  SELECT incidnt_num,SUBSTR(date, 7, 4),
+       (SUBSTR(date, 7, 4) || '-' || LEFT(date, 2) ||
+        '-' || SUBSTR(date, 4, 2) || ' ' || time || ':00')::timestamp AS timestamp,
+       (SUBSTR(date, 7, 4) || '-' || LEFT(date, 2) ||
+        '-' || SUBSTR(date, 4, 2) || ' ' || time || ':00')::timestamp
+        + INTERVAL '1 week' AS timestamp_plus_interval
+  FROM tutorial.sf_crime_incidents_2014_01
+  
+  
+  SELECT cleaned_date,
+       EXTRACT('year'   FROM cleaned_date) AS year,
+       EXTRACT('month'  FROM cleaned_date) AS month,
+       EXTRACT('day'    FROM cleaned_date) AS day,
+       EXTRACT('hour'   FROM cleaned_date) AS hour,
+       EXTRACT('minute' FROM cleaned_date) AS minute,
+       EXTRACT('second' FROM cleaned_date) AS second,
+       EXTRACT('decade' FROM cleaned_date) AS decade,
+       EXTRACT('dow'    FROM cleaned_date) AS day_of_week
+  FROM tutorial.sf_crime_incidents_cleandate
+  
+  
+  SELECT cleaned_date,
+       DATE_TRUNC('year'   , cleaned_date) AS year,
+       DATE_TRUNC('month'  , cleaned_date) AS month,
+       DATE_TRUNC('week'   , cleaned_date) AS week,
+       DATE_TRUNC('day'    , cleaned_date) AS day,
+       DATE_TRUNC('hour'   , cleaned_date) AS hour,
+       DATE_TRUNC('minute' , cleaned_date) AS minute,
+       DATE_TRUNC('second' , cleaned_date) AS second,
+       DATE_TRUNC('decade' , cleaned_date) AS decade
+  FROM tutorial.sf_crime_incidents_cleandate
+  
+  SELECT CURRENT_TIME AS time,
+       CURRENT_TIME AT TIME ZONE 'PST' AS time_pst
+  //times
+  SELECT CURRENT_DATE AS date,
+       CURRENT_TIME AS time,
+       CURRENT_TIMESTAMP AS timestamp,
+       LOCALTIME AS localtime,
+       LOCALTIMESTAMP AS localtimestamp,
+       NOW() AS now
+       
+/*data wrangling - crime incidents per week */
+  SELECT count(*),DATE_TRUNC('week'   , cleaned_date)::date as dt
+    FROM tutorial.sf_crime_incidents_cleandate group by dt 
+    
+
+  SELECT NOW() AT TIME ZONE 'PST' -cleaned_date AS time_ago 
+    FROM tutorial.sf_crime_incidents_cleandate
+  
+  
+  /*Query shows exactly how long ago each indicent was reported.*/
+    SELECT incidnt_num,
+       cleaned_date,
+       NOW() AT TIME ZONE 'PST' AS now,
+       NOW() AT TIME ZONE 'PST' - cleaned_date AS time_ago 
+  FROM tutorial.sf_crime_incidents_cleandate
+  
+  // Sub Queries
+  select inc.incidnt_num from (select * from tutorial.sf_crime_incidents_2014_01 WHERE descript = 'WARRANT ARREST') inc where inc.resolution='NONE'
+  
+  select crime.* from (select * from tutorial.sf_crime_incidents_cleandate group by category) crime
+       
+  select * from tutorial.sf_crime_incidents_cleandate group by category
+  
+  /*Average incidents per month*/
+  SELECT sub.category,
+       AVG(sub.incidents) AS avg_incidents_per_month
+  FROM (
+  SELECT EXTRACT('month' FROM cleaned_date) AS month,
+               category,
+               COUNT(1) AS incidents
+          FROM tutorial.sf_crime_incidents_cleandate
+         GROUP BY 1,2) sub
+ GROUP BY 1
+ 
+ /*Rows from three categories with fewest incidents*/
+ select count(*) from tutorial.sf_crime_incidents_2014_01 inc join (select category,count(*) as number_of_inc from tutorial.sf_crime_incidents_2014_01 group by category order by number_of_inc asc limit 3)sub
+    ON sub.category = inc.category
+ 
+ 
+SELECT funded_month AS month,
+               COUNT(DISTINCT company_permalink) AS companies_rec_investment
+          FROM tutorial.crunchbase_investments
+          GROUP BY 1
+
+/*ranks investors based on investments*/
+select investor_name,count(investor_name) from  (
+        SELECT *
+          FROM tutorial.crunchbase_investments_part1
+         
+         UNION ALL
+        
+         SELECT *
+           FROM tutorial.crunchbase_investments_part2
+       ) sub
+       group by investor_name order by count desc
+  
+  
+  select sub.investor_name,count(sub.investor_name) from  (
+        SELECT *
+          FROM tutorial.crunchbase_investments_part1
+         
+         UNION ALL
+        
+         SELECT *
+           FROM tutorial.crunchbase_investments_part2
+       ) sub 
+       join tutorial.crunchbase_companies comp
+       on comp.permalink = sub.company_permalink and comp.status='operating'
+       group by sub.investor_name order by count desc
+
+SELECT start_terminal,
+       duration_seconds,
+       SUM(duration_seconds) OVER
+         (PARTITION BY start_terminal ORDER BY start_time)
+         AS running_total
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+ 
+select * from tutorial.dc_bikeshare_q1_2012
+
+SELECT start_terminal,
+       duration_seconds,
+       SUM(duration_seconds) OVER
+         (PARTITION BY start_terminal) AS running_total,
+       COUNT(duration_seconds) OVER
+         (PARTITION BY start_terminal) AS running_count,
+       AVG(duration_seconds) OVER
+         (PARTITION BY start_terminal) AS running_avg
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+
+
+SELECT start_terminal,
+       duration_seconds,
+       SUM(duration_seconds) OVER
+         (PARTITION BY start_terminal ORDER BY start_time)
+         AS running_total,
+       COUNT(duration_seconds) OVER
+         (PARTITION BY start_terminal ORDER BY start_time)
+         AS running_count,
+       AVG(duration_seconds) OVER
+         (PARTITION BY start_terminal ORDER BY start_time)
+         AS running_avg
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+ 
+ 
+ SELECT start_terminal,
+       duration_seconds,
+       SUM(duration_seconds) OVER
+         (PARTITION BY end_terminal ORDER BY start_time)
+         AS running_total
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+
+SELECT start_terminal,
+       start_time,
+       duration_seconds,
+       ROW_NUMBER() OVER (partition by start_terminal ORDER BY start_time)
+                    AS row_number
+  FROM tutorial.dc_bikeshare_q1_2012
+  WHERE start_time < '2012-01-08'
+
+SELECT start_terminal,
+       duration_seconds,
+       RANK() OVER (PARTITION BY start_terminal
+                    ORDER BY start_time)
+              AS rank
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+SELECT * FROM
+(
+SELECT start_terminal,
+       duration_seconds,
+       DENSE_RANK() OVER (PARTITION BY start_terminal
+                    ORDER BY  duration_seconds desc)
+              AS rank
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08') 
+ sub
+ WHERE sub.rank <= 5
+
+
+SELECT start_terminal,
+       duration_seconds,
+       NTILE(4) OVER
+         (PARTITION BY start_terminal ORDER BY duration_seconds)
+          AS quartile,
+       NTILE(5) OVER
+         (PARTITION BY start_terminal ORDER BY duration_seconds)
+         AS quintile,
+       NTILE(100) OVER
+         (PARTITION BY start_terminal ORDER BY duration_seconds)
+         AS percentile
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+ ORDER BY start_terminal, duration_seconds
+ 
+ select duration_seconds, NTILE(100) OVER (ORDER BY duration_seconds) AS percentile FROM tutorial.dc_bikeshare_q1_2012 WHERE start_time < '2012-01-08' ORDER BY duration_seconds DESC
+ 
+ SELECT start_terminal,
+       duration_seconds,
+       LAG(duration_seconds, 1) OVER
+         (PARTITION BY start_terminal ORDER BY duration_seconds) AS lag,
+       LEAD(duration_seconds, 1) OVER
+         (PARTITION BY start_terminal ORDER BY duration_seconds) AS lead
+  FROM tutorial.dc_bikeshare_q1_2012
+ WHERE start_time < '2012-01-08'
+ ORDER BY start_terminal, duration_seconds
+ 
+ 
+ EXPLAIN
+SELECT *
+  FROM benn.sample_event_table
+ WHERE event_date >= '2014-03-01'
+   AND event_date < '2014-04-01'
+ LIMIT 100
+
+
+SELECT years.*,
+       earthquakes.*
+  FROM tutorial.worldwide_earthquakes earthquakes
+ CROSS JOIN (
+       SELECT year
+         FROM (VALUES (2000),(2001),(2002),(2003),(2004),(2005),(2006),
+                      (2007),(2008),(2009),(2010),(2011),(2012)) v(year)
+       ) years
+
+SELECT years.*,
+       earthquakes.magnitude,
+       CASE year
+         WHEN 2000 THEN year_2000
+         WHEN 2001 THEN year_2001
+         WHEN 2002 THEN year_2002
+         WHEN 2003 THEN year_2003
+         WHEN 2004 THEN year_2004
+         WHEN 2005 THEN year_2005
+         WHEN 2006 THEN year_2006
+         WHEN 2007 THEN year_2007
+         WHEN 2008 THEN year_2008
+         WHEN 2009 THEN year_2009
+         WHEN 2010 THEN year_2010
+         WHEN 2011 THEN year_2011
+         WHEN 2012 THEN year_2012
+         ELSE NULL END
+         AS number_of_earthquakes
+  FROM tutorial.worldwide_earthquakes earthquakes
+ CROSS JOIN (
+       SELECT year
+         FROM (VALUES (2000),(2001),(2002),(2003),(2004),(2005),(2006),
+                      (2007),(2008),(2009),(2010),(2011),(2012)) v(year)
+       ) years
+
+  
+  
+  
+
+
+
+
+
+ 
