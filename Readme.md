@@ -1,1 +1,1 @@
-Applying Data and Machine learning skills. 
+Applying Datascience and Machine learning skills. 
