@@ -112,3 +112,90 @@ Some of the observations obtained from the correlation matrix (Figure 16) are:
 - Temperature felt (atemp) is very highly correlated with the actual temperature and hence it would be best to consider the only the temperature felt. 
 - Humidity is negatively correlated with the total users count. Humidity has a higher degree of negative correlation with casual users count as compared to registered users count. This suggests that high humidity days like rainy season attracts less riders.
 - Wind Speed is positively correlated with bike rental count but the correlation is low.
+
+# Predictive Task
+<p>Our predictive task is to forecast bike rental demand of Bike sharing program in Washington, D.C based on historical usage patterns in relation with weather, day of week and hour of the day.</p>
+
+## Validation
+<p>We will be validating our model and tuning the hyperparameters using a 10-fold cross validation. We randomly shuffled our data set and used 1/3 of the data points as test set. We partitioned the remaining data set into 10 splits. In each of the 10 iterations we trained our model on 9 splits and calculated the RMSLE on the remaining split. On the basis of the average of 10 RMSLEs, we tuned our hyper parameters. After tuning the hyperparameters, we trained the model on the complete data set and evaluated the model on the test set. Thus, 10-fold cross validation was used to prevent overfitting.
+</p>
+
+## Feature Selection 
+<p>Based on the data exploration we decided to use the Independent Features mentioned below. 
+</p>
+
+**Normalized Temperature:** In the original dataset we had temperature and temperature felt as two different features. But since the correlation between temperature felt and temperature is too high, we hypothesised that dropping one feature would not affect the error. we decided to keep just the temperature as having less number of features reduces the complexity of models. 
+
+**Weather Condition:** We used one-hot encoding to represent the weather: clear weather, misty weather, light snow/rain weather and heavy snow/rain weather. 
+
+**Weekday:** Using the datetime stamp in our data set, we calculated the day of the week. We used one-hot encoding to represent the day of the week from Sunday through Saturday. 
+
+**Date:** We extracted the date from the datetime stamp in the dataset. We used the day of the month as a feature. 
+
+**Month:** We extracted the month from the date timestamp. We used one-hot encoding to represent the months between January and December. 
+
+**Working day:** This is a boolean value, 1 for weekdays and 0 for weekends
+
+**Season:** We used one-hot encoding to represent the four seasons: winter, spring, summer and fall. 
+
+**Holiday:** This is a boolean value, 1 if it is a government holiday.
+
+**Hour:** Hour is also extracted from the timestamp value present in the data set. We used one-hot encoding to represent the hour of the day. 
+
+**Year:** As seen in the data exploration section, 2012 had much higher overall bike demand as compared to 2011. We used one-hot encoding to represent the year: 0 for 2011 and 1 for 2012.
+
+**Humidity:**  Normalized humidity. The values are divided to 100 (max)
+
+**Windspeed:** Normalized wind speed. The values are divided to 67 (max)
+
+## Models
+<p>We run a model to predict the total demand (demand by registered users and demand by casual users).</p>
+
+<p>We explored different types of parametric models based on the features mentioned above. Since this is a regression problem, we have to choose a regressor that can efficiently train our model, while taking into account that we have 17379 data points in our training set and around 12 features.</p>
+
+## Evaluating the Model
+<p>We will be evauluating the model on the basis of the Coefficient of Determination (**R Square**) and root-mean-square error (**RMSE**)</p>
+The coefficient of determination, **R Square**, tells us the percentage of the variance in the response variable y that can be explained by the linear regression model.
+**R Square=ESS/TSS** (Explained Sum of Squares/Total Sum of Squares)
+The **R Square** value is one of the most common metrics that people use in describing the quality of a model, but it is important to note that **R Square** *increases artificially as a side-effect of increasing the number of independent variables.* While **R Square** is reported in almost all statistical packages.
+
+The root-mean-square deviation (**RMSD**) or root-mean-square error (**RMSE**) (or sometimes root-mean-squared error) is a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.
+
+## Linear Regression
+Linear regression attempts to model the relationship between two variables by fitting a linear equation to observed data. One variable is considered to be an explanatory variable, and the other is considered to be a dependent variable.
+
+Linear Regression model is the first model applied to see the fit for the data features. We used Sklearn library from Linear Regression. 
+
+## Decision Tree
+A decision trees are a non-parametric supervised learning method, the goal is to create a model that predicts the value of a target variable by learning simple decision rules inferred from the data features.
+
+We trained our model using Sklearn decision trees library for different values of max_depth (maximum depth of each tree in the forest) = [1,11,22,33,44] and max_features (number of features to consider while looking at the split) = [auto]. We found the cross validation RMSLE of 0.35074 with max_depth = 25 and Max_features = All the features.
+
+## Random Forest
+A random forest is a meta estimator that fits a number of classifying decision trees on various sub-samples of the dataset. To improve the predictive accuracy and control over-fitting, averaging is used. We trained our model using Sklearn random forest library for different values of n_estimators (number of trees in the forest) = [10,20,30,40,50,60,70,100] and max_depth (maximum depth of each tree in the forest) = [1,11,22,33,44] and max_features (number of features to consider while looking at the split) = [auto]. We found the cross validation RMSLE of 0.35074 with n_estimator = 100, max_depth = 25 and Max_features = All the features.
+
+## Results
+
+Model | R Square | RMSE 
+--- | --- | ---
+*Linear Regression* | `0.159` | `0.159` 
+*Ridge Regression* | `0.158` | `143.73`
+*Lasso Regression* | `0.18` | `143.98`
+*Decision Tree* | `0.65` | `84.81`
+*Random Forest* | `0.789` | `63.86`
+
+From the above results we see that the ensemble methods works better than the linear regression. Few of the reason why these methods worked better are: 
+
+- Decision trees are the base regressor for all the ensembles methods used. Using decision trees we are able to model the complex nonlinear interaction between the features. 
+- With decision trees, if two features are strongly correlated, one of the features is arbitrarily chosen for a split and the other feature has no further effect on the model. Whereas the linear regression shows low performance when the features are correlated. 
+- Linear regressor is not good at handling outliers, whereas the ensemble of decision trees are not affected much by the presence of outliers. 
+- Though a single decision tree tends to overfit on the train data, ensemble of trees are better at preventing overfitting. To improve the performance of decision tree we used ensemble methods that reduces the bias and/or variance of the base regressors.
+
+Random Forest regression with **R^2** score of **0.789** is a better fit for this dataset.
+
+![alt text](plot/img/random_forest_regression_demand.png)
+
+**Figure 17. Feature Importance for demand**
+
+## Conclusion
+We established significant relationship between several independent variables and Bikesharing ridership. We developed a regression model that can be applied directly to bike station business to predict hourly demand. We also found that the usage of bike rental is far more high for registered users as compared to casual user and the demand is maximum during morning and evening travel hours. Also weather has significant effect on bike ridership. A clear and sunny weather invites more riders as compared to rainy and snow weather. We trained various different models and performed featurization and found that Random Forest was best to capture the variance and non linearity of the dataset. It gave an **R^2** of 0.789 and **RMSE** of 63.86 on test set. We can thus conclude that the developed model can be used to predict the bike demand in urban environment. The model can be used by the Bike sharing company to strategically place the bikes depending on the forecast. They can also change their revenue model to introduce price surge during peak hours based on the forecast of demand.
