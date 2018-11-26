@@ -155,9 +155,9 @@ Some of the observations obtained from the correlation matrix (Figure 16) are:
 
 ## Evaluating the Model
 <p>We will be evauluating the model on the basis of the Coefficient of Determination (**R Square**) and root-mean-square error (**RMSE**)</p>
-The coefficient of determination, **R Square**, tells us the percentage of the variance in the response variable y that can be explained by the linear regression model.
-**R Square=ESS/TSS** (Explained Sum of Squares/Total Sum of Squares)
-The **R Square** value is one of the most common metrics that people use in describing the quality of a model, but it is important to note that **R Square** *increases artificially as a side-effect of increasing the number of independent variables.* While **R Square** is reported in almost all statistical packages.
+The coefficient of determination, R Square, tells us the percentage of the variance in the response variable y that can be explained by the linear regression model.
+R Square=ESS/TSS (Explained Sum of Squares/Total Sum of Squares)
+The R Square value is one of the most common metrics that people use in describing the quality of a model, but it is important to note that R Square *increases artificially as a side-effect of increasing the number of independent variables.* While R Square is reported in almost all statistical packages.
 
 The root-mean-square deviation (RMSD) or root-mean-square error (RMSE) (or sometimes root-mean-squared error) is a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.
 
