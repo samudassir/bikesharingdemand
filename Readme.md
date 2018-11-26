@@ -78,3 +78,19 @@ To understand the different aspects of demand, we plotted different plots.
 ![alt text](plot/img/humidity_demand.png)
 
 **Figure 9** *shows, that with very high humidity levels the demand decreasing.*
+
+![alt text](plot/img/clear_weather_condition_demand.png)
+
+**Figure 10** *suggests, in clear weather conditions the demand is higher*
+
+![alt text](plot/img/cloudy_weather_condition_demand.png)
+
+**Figure 11** *Demand starts to decline for cloudy weather.
+
+![alt text](plot/img/snow_rain_weather_condition_demand.png)
+
+**Figure 12**, *Demand declines even further for snowy(rainy) conditions*
+
+![alt text](plot/img/storm_weather_condition_demand.png)
+
+**Figure 13**, *Demand lowest for stormy weather.*
