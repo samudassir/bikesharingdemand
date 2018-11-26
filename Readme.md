@@ -159,7 +159,7 @@ The coefficient of determination, **R Square**, tells us the percentage of the 
 **R Square=ESS/TSS** (Explained Sum of Squares/Total Sum of Squares)
 The **R Square** value is one of the most common metrics that people use in describing the quality of a model, but it is important to note that **R Square** *increases artificially as a side-effect of increasing the number of independent variables.* While **R Square** is reported in almost all statistical packages.
 
-The root-mean-square deviation (**RMSD**) or root-mean-square error (**RMSE**) (or sometimes root-mean-squared error) is a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.
+The root-mean-square deviation (RMSD) or root-mean-square error (RMSE) (or sometimes root-mean-squared error) is a frequently used measure of the differences between values (sample or population values) predicted by a model or an estimator and the values observed.
 
 ## Linear Regression
 Linear regression attempts to model the relationship between two variables by fitting a linear equation to observed data. One variable is considered to be an explanatory variable, and the other is considered to be a dependent variable.
