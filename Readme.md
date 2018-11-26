@@ -60,6 +60,21 @@ To understand the different aspects of demand, we plotted different plots.
 **Figure 4** *shows, a line plot of variation in demand during working and non-working days at an hourly basis, we can observe during working days the demand is higher in morning and evening and during non-working days demand is higher during afternoon, having a similarity in pattern with Figure 3, suggesting the demand on working days could be driven by registered users and on nonworking days by casual users.*
 
 ![alt text](plot/img/demand_in_parts_of_day.png)
+
 **Figure 5** *shows, a bar chart of demand for hourly intervals of the day, we notice that even though we noticed in Figure 4 that demand is high during morning and evening hours, it seems to reach peak between 4 - 8 PM.*
 
+![alt text](plot/img/seasonal_demand.png)
 
+**Figure 6** *shows, a line plot of variation in demand for different seasons in a year, we can observe that the demand in Fall season highest is slightly higher than summer and the demand is lowest in spring season.*
+
+![alt text](plot/img/temp_demand.png)
+
+**Figure 7** *shows, a scatter plot for demand variation for temperature, we observe the demand starts to decline at higher temperatures, this could be the reason for summer having slightly lower demand than Fall season.*
+
+![alt text](plot/img/windspeed_demand.png)
+
+**Figure 8** *shows, that with very high wind speed the demand decreasing.*
+
+![alt text](plot/img/humidity_demand.png)
+
+**Figure 9** *shows, that with very high humidity levels the demand decreasing.*
