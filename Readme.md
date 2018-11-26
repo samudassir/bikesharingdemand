@@ -94,3 +94,9 @@ To understand the different aspects of demand, we plotted different plots.
 ![alt text](plot/img/storm_weather_condition_demand.png)
 
 **Figure 13**, *Demand lowest for stormy weather.*
+
+![alt text](plot/img/2011_demand_weather_conditions.png)
+
+![alt text](plot/img/2012_demand_weather_conditions.png)
+
+**Figure 14, 15** *shows, increase in average demand from year 2011* to year 2012 for similar weather conditions, making it clear that people are choosing a healthy life style and a convenient commute option.
