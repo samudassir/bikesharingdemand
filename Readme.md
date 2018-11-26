@@ -45,12 +45,12 @@ To understand the different aspects of demand, we plotted different plots.
 
 ![alt text](plot/img/demand_distribution.png)
 
-**Figure 1 ** *shows, the histogram of bike rental demand distribution, we can see close to 40% of rides per hour are in between 0 and 100.*
+** Figure 1 ** *shows, the histogram of bike rental demand distribution, we can see close to 40% of rides per hour are in between 0 and 100.*
 
 ![alt text](plot/img/mean_casual_registered_demand_percent.png)
 
-**Figure 2 ** *shows, a bar chart of Casual and Registered rides percentage contribution to the total demand for days of week, we notice that the casual rides increase during the weekends, but the registered riders contribute to higher percentage of overall demand.*
+** Figure 2 ** *shows, a bar chart of Casual and Registered rides percentage contribution to the total demand for days of week, we notice that the casual rides increase during the weekends, but the registered riders contribute to higher percentage of overall demand.*
 
 ![alt text](plot/img/mean_casual_registered_hourly_demand.png)
 
-**Figure 3 ** *shows that the demand from Registered rides peak during morning and evening hours, whereas the casual riders have higher demands around noon.*
+** Figure 3 ** *shows that the demand from Registered rides peak during morning and evening hours, whereas the casual riders have higher demands around noon.*
