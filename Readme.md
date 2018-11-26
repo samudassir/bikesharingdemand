@@ -100,3 +100,15 @@ To understand the different aspects of demand, we plotted different plots.
 ![alt text](plot/img/2012_demand_weather_conditions.png)
 
 **Figure 14, 15** *shows, increase in average demand from year 2011* to year 2012 for similar weather conditions, making it clear that people are choosing a healthy life style and a convenient commute option.
+
+![alt text](plot/img/correlation_matrix.png)
+
+**Figure 16** *shows, the correlation matrix for continuous variables like temperature, temperature felt, humidity and windspeed with the total count, registred users count and casual users count.*
+
+
+Some of the observations obtained from the correlation matrix (Figure 16) are: 
+
+> Temperature is positively correlated with the total users count. Temperature has a higher degree of positive correlation with casual bike rental count as compared to registered bike rental count. That means people prefer to ride a bike at cool to medium temperatures than cold temperatures in Washington DC. 
+> Temperature felt (atemp) is very highly correlated with the actual temperature and hence it would be best to consider the only the temperature felt. 
+> Humidity is negatively correlated with the total users count. Humidity has a higher degree of negative correlation with casual users count as compared to registered users count. This suggests that high humidity days like rainy season attracts less riders.
+> Wind Speed is positively correlated with bike rental count but the correlation is low.
