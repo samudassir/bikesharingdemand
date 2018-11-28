@@ -178,7 +178,7 @@ A random forest is a meta estimator that fits a number of classifying decision t
 
 Model | R Square | RMSE 
 --- | --- | ---
-*Linear Regression* | `0.159` | `0.159` 
+*Linear Regression* | `0.159` | `143.74` 
 *Ridge Regression* | `0.158` | `143.73`
 *Lasso Regression* | `0.18` | `143.98`
 *Decision Tree* | `0.65` | `84.81`
